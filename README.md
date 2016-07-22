@@ -1,1 +1,2 @@
-This is the homework code repo, for Machine Learning @ NTU
+## Homework One
+PLA and pocket algorithms.
