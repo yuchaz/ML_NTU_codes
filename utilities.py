@@ -57,7 +57,8 @@ def random_train (features, decisions, times, eta=1):
 def create_histogram (cycles_list):
     cycle_min = amin(cycles_list)
     cycle_max = amax(cycles_list)
-    hist_bins = range(cycle_min, cycle_max+1)
-    hist_data = histogram(cycles_list, bins=hist_bins)
-    plt.hist(hist_data, bins=hist_bins)
+    # hist_bins = range(cycle_min, cycle_max+1)
+    hist_bins = 10
+    hist_data, bin_edges = histogram(cycles_list, bins=hist_bins)
+    plt.hist(hist_data, bins=bin_edges)
     plt.show()
