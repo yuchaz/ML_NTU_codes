@@ -1,4 +1,4 @@
-from numpy import array, dot, zeros, add
+from numpy import array, dot, zeros, add, random, arange
 
 DATA_PATH = 'hw1_15_train.dat'
 
@@ -22,13 +22,22 @@ def same_sign (a, b):
     else:
         return True
 
-def train (features, decisions):
+def generate_index_map (length, rand=False):
+    index_map = arange(length)
+    if rand:
+        random.shuffle(index_map)
+    return index_map
+
+
+def train (features, decisions, rand=False):
     weight_score = zeros(len(features[0]))
     last_training_index = 0
     loop_cycling_thru = 0
+    index_map = generate_index_map(len(features), rand)
+
     while True:
         if_find_fault = False
-        for idx in range(len(features)):
+        for idx in index_map:
             if same_sign(dot(weight_score, features[idx]), decisions[idx]) == False:
                 weight_score = add(weight_score, features[idx] * decisions[idx])
                 last_training_index = idx
