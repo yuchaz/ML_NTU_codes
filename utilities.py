@@ -1,5 +1,5 @@
-from numpy import array, dot, zeros, add, random, arange, average
-
+from numpy import array, dot, zeros, add, random, arange, average, histogram, amin, amax
+import matplotlib.pyplot as plt
 def load_file (infile):
     features_of_data = []
     decisions_of_data = []
@@ -53,3 +53,11 @@ def random_train (features, decisions, times, eta=1):
         cycles_list.append(loop_cycling_thru)
 
     return cycles_list, average(cycles_list)
+
+def create_histogram (cycles_list):
+    cycle_min = amin(cycles_list)
+    cycle_max = amax(cycles_list)
+    hist_bins = range(cycle_min, cycle_max+1)
+    hist_data = histogram(cycles_list, bins=hist_bins)
+    plt.hist(hist_data, bins=hist_bins)
+    plt.show()

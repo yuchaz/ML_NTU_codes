@@ -5,8 +5,10 @@ TRAIN_TIMES = 2000
 
 def main():
     features, decisions = util.load_file(DATA_PATH)
-    cl, average_of_cycles = util.random_train (features, decisions, TRAIN_TIMES)
+    cycles_list, average_of_cycles = util.random_train (features, decisions, TRAIN_TIMES)
     print (average_of_cycles)
+    util.create_histogram(cycles_list)
+
 
 if __name__ == '__main__':
     main()
