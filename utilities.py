@@ -1,4 +1,4 @@
-from numpy import array, dot, zeros, add, random, arange
+from numpy import array, dot, zeros, add, random, arange, average
 
 def load_file (infile):
     features_of_data = []
@@ -27,7 +27,7 @@ def generate_index_map (length, rand=False):
     return index_map
 
 
-def train (features, decisions, rand=False):
+def train (features, decisions, rand=False, eta=1):
     weight_score = zeros(len(features[0]))
     last_training_index = 0
     loop_cycling_thru = 0
@@ -37,7 +37,7 @@ def train (features, decisions, rand=False):
         if_find_fault = False
         for idx in index_map:
             if same_sign(dot(weight_score, features[idx]), decisions[idx]) == False:
-                weight_score = add(weight_score, features[idx] * decisions[idx])
+                weight_score = add(weight_score, eta * features[idx] * decisions[idx])
                 last_training_index = idx
                 if_find_fault = True
                 loop_cycling_thru += 1
@@ -45,3 +45,11 @@ def train (features, decisions, rand=False):
             break
 
     return loop_cycling_thru, last_training_index
+
+def random_train (features, decisions, times, eta=1):
+    cycles_list = []
+    for idx in range(times):
+        loop_cycling_thru, lti = train(features, decisions, True, eta)
+        cycles_list.append(loop_cycling_thru)
+
+    return cycles_list, average(cycles_list)
