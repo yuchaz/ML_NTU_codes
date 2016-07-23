@@ -1,30 +1,47 @@
-import numpy as np
+from numpy import array, dot, zeros, add
 
-f = open('hw1_15_train.dat', 'r')
-xVectorList = []
-yList = []
+DATA_PATH = 'hw1_15_train.dat'
 
-for line in f:
-    lineDataArray = map(float, line.split())
-    x = np.array([1]+lineDataArray[:-1])
-    y = lineDataArray[-1]
-    xVectorList.append(x)
-    yList.append(y)
+def load_file (infile):
+    features_of_data = []
+    decisions_of_data = []
 
-wVector = np.array([0,0,0,0,0])
+    with open(infile, 'r') as f:
+        for line in f:
+            line_list = map(float, line.split())
+            x = array([1]+line_list[:-1])
+            y = line_list[-1]
+            features_of_data.append(x)
+            decisions_of_data.append(y)
 
-loopCyclyingThru = 0
-lastMistakeIndex = 0
-while True:
-    ifInnerLoopContinues = False
-    for idx in range(len(xVectorList)):
-        if np.dot(wVector,xVectorList[idx])*yList[idx] <= 0:
-            wVector = np.add(wVector, xVectorList[idx]*yList[idx])
-            lastMistakeIndex = idx
-            ifInnerLoopContinues = True
+    return features_of_data, decisions_of_data
 
-    loopCyclyingThru += 1
-    if ifInnerLoopContinues == False:
-        break
+def same_sign (a, b):
+    if a * b <= 0:
+        return False
+    else:
+        return True
 
-print ('It loop through {0} loops;\nLast mistake index is {1};\nThe final w is \n{2}'.format(loopCyclyingThru,lastMistakeIndex,wVector))
+def train (features, decisions):
+    weight_score = zeros(len(features[0]))
+    last_training_index = 0
+    loop_cycling_thru = 0
+    while True:
+        if_find_fault = False
+        for idx in range(len(features)):
+            if same_sign(dot(weight_score, features[idx]), decisions[idx]) == False:
+                weight_score = add(weight_score, features[idx] * decisions[idx])
+                last_training_index = idx
+                if_find_fault = True
+                loop_cycling_thru += 1
+        if if_find_fault == False:
+            break
+
+    print ('loop thru {0}, last training data index {1}'.format(loop_cycling_thru, last_training_index))
+
+def main():
+    features, decisions = load_file(DATA_PATH)
+    train(features, decisions)
+
+if __name__ == '__main__':
+    main()
