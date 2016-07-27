@@ -46,6 +46,45 @@ def train (features, decisions, rand=False, eta=1):
 
     return loop_cycling_thru, last_training_index
 
+def run_pocket (train_path, verify_path, update_times, loop_times):
+    train_features, train_decisions = load_file(train_path)
+    verify_features, verify_decisions = load_file(verify_path)
+    error_rate_list = []
+
+    for i in range(loop_times):
+        trained_weight_score = pocket_train(train_features, train_decisions, update_times)
+        error_rate = pocket_verfity (verify_features, verify_decisions, trained_weight_score)
+        error_rate_list.append(error_rate)
+
+    return error_rate_list, average(error_rate_list)
+
+def pocket_train (features, decisions, update_times, rand=True):
+    weight_score = zeros(len(features[0]))
+    error_num_last_loop = len(features[0])
+    index_map = generate_index_map(len(features), rand)
+
+    for i in range(update_times):
+        error_features_index_list = []
+        for idx in index_map:
+            if same_sign(dot(weight_score, features[idx]), decisions[idx]) == False:
+                error_features_index_list.append(idx)
+        if len(error_features_index_list) <= error_num_last_loop:
+            target_index = error_features_index_list[0]
+            weight_score = add(weight_score, features[target_index] * decisions[target_index])
+            error_num_last_loop = len(error_features_index_list)
+
+    return weight_score
+
+def pocket_verfity (features, decisions, weight_score):
+    error_count = 0
+    for idx in range(len(features)):
+        if same_sign(dot(weight_score, features[idx]), decisions[idx]) == False:
+            error_count += 1
+
+    error_rate = error_count / len(features)
+    return error_rate
+
+
 def random_train (features, decisions, times, eta=1):
     cycles_list = []
     for idx in range(times):
@@ -54,11 +93,11 @@ def random_train (features, decisions, times, eta=1):
 
     return cycles_list, average(cycles_list)
 
-def create_histogram (cycles_list):
-    cycle_min = amin(cycles_list)
-    cycle_max = amax(cycles_list)
-    # hist_bins = range(cycle_min, cycle_max+1)
+def create_histogram (list_to_draw):
+    list_min = amin(list_to_draw)
+    list_max = amax(list_to_draw)
+    # hist_bins = range(list_min, list_max+1)
     hist_bins = 10
-    hist_data, bin_edges = histogram(cycles_list, bins=hist_bins)
+    hist_data, bin_edges = histogram(list_to_draw, bins=hist_bins)
     plt.hist(hist_data, bins=bin_edges)
     plt.show()
