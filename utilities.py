@@ -1,5 +1,7 @@
 from numpy import array, dot, zeros, add, random, arange, average, histogram, amin, amax
 import matplotlib.pyplot as plt
+import random
+
 def load_file (infile):
     features_of_data = []
     decisions_of_data = []
@@ -46,13 +48,14 @@ def train (features, decisions, rand=False, eta=1):
 
     return loop_cycling_thru, last_training_index
 
-def run_pocket (train_path, verify_path, update_times, loop_times):
+def run_pocket (train_path, verify_path, update_times, loop_times, use_w_last=False):
     train_features, train_decisions = load_file(train_path)
     verify_features, verify_decisions = load_file(verify_path)
     error_rate_list = []
 
     for i in range(loop_times):
-        trained_weight_score = pocket_train(train_features, train_decisions, update_times)
+        t_weight_score_head, t_weight_score_last = pocket_train(train_features, train_decisions, update_times)
+        trained_weight_score = t_weight_score_head if use_w_last == False else t_weight_score_last
         error_rate = pocket_verfity (verify_features, verify_decisions, trained_weight_score)
         error_rate_list.append(error_rate)
 
@@ -60,7 +63,8 @@ def run_pocket (train_path, verify_path, update_times, loop_times):
 
 def pocket_train (features, decisions, update_times, rand=True):
     weight_score = zeros(len(features[0]))
-    error_num_last_loop = len(features)
+    weight_score_head = zeros(len(features[0]))
+    least_error_num = len(features)
     index_map = generate_index_map(len(features), rand)
 
     for i in range(update_times):
@@ -69,12 +73,14 @@ def pocket_train (features, decisions, update_times, rand=True):
             if same_sign(dot(weight_score, features[idx]), decisions[idx]) == False:
                 error_features_index_list.append(idx)
 
-        if len(error_features_index_list) <= error_num_last_loop:
-            target_index = error_features_index_list[0]
-            weight_score = add(weight_score, features[target_index] * decisions[target_index])
-            error_num_last_loop = len(error_features_index_list)
+        if len(error_features_index_list) <= least_error_num:
+            weight_score_head = weight_score
+            least_error_num = len(error_features_index_list)
 
-    return weight_score
+        target_index = error_features_index_list[0]
+        weight_score = add(weight_score, features[target_index] * decisions[target_index])
+
+    return weight_score_head, weight_score
 
 def pocket_verfity (features, decisions, weight_score):
     error_count = 0
@@ -100,5 +106,6 @@ def create_histogram (list_to_draw):
     # hist_bins = range(list_min, list_max+1)
     hist_bins = 10
     hist_data, bin_edges = histogram(list_to_draw, bins=hist_bins)
+    # print hist_data, bin_edges
     plt.hist(hist_data, bins=bin_edges)
     plt.show()
