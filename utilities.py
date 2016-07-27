@@ -60,7 +60,7 @@ def run_pocket (train_path, verify_path, update_times, loop_times):
 
 def pocket_train (features, decisions, update_times, rand=True):
     weight_score = zeros(len(features[0]))
-    error_num_last_loop = len(features[0])
+    error_num_last_loop = len(features)
     index_map = generate_index_map(len(features), rand)
 
     for i in range(update_times):
@@ -68,6 +68,7 @@ def pocket_train (features, decisions, update_times, rand=True):
         for idx in index_map:
             if same_sign(dot(weight_score, features[idx]), decisions[idx]) == False:
                 error_features_index_list.append(idx)
+
         if len(error_features_index_list) <= error_num_last_loop:
             target_index = error_features_index_list[0]
             weight_score = add(weight_score, features[target_index] * decisions[target_index])
@@ -81,7 +82,7 @@ def pocket_verfity (features, decisions, weight_score):
         if same_sign(dot(weight_score, features[idx]), decisions[idx]) == False:
             error_count += 1
 
-    error_rate = error_count / len(features)
+    error_rate = error_count / float(len(features))
     return error_rate
 
 
