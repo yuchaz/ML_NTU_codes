@@ -1,4 +1,4 @@
-from numpy import array, dot, zeros, add, random, arange, average, histogram, amin, amax
+from numpy import array, dot, zeros, add, random, arange, average
 import matplotlib.pyplot as plt
 import random
 
@@ -100,12 +100,13 @@ def random_train (features, decisions, times, eta=1):
 
     return cycles_list, average(cycles_list)
 
-def create_histogram (list_to_draw):
-    list_min = amin(list_to_draw)
-    list_max = amax(list_to_draw)
-    # hist_bins = range(list_min, list_max+1)
-    hist_bins = 10
-    hist_data, bin_edges = histogram(list_to_draw, bins=hist_bins)
-    # print hist_data, bin_edges
-    plt.hist(hist_data, bins=bin_edges)
+def create_histogram (list_to_draw, x_label='X Axis', hist_title=r'$\mathrm{Histogram}$', hist_color='green'):
+    hist_bins = len(list_to_draw)
+    plt.hist(list_to_draw, bins=hist_bins, normed=True, color=hist_color, histtype='step')
+
+    plt.xlabel(x_label)
+    plt.ylabel('Frequency')
+    plt.title(hist_title)
+    plt.grid(True)
+
     plt.show()
