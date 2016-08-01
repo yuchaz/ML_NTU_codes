@@ -38,8 +38,10 @@ def train (features, decisions, rand=False, eta=1):
     while True:
         if_find_fault = False
         for idx in index_map:
-            if same_sign(dot(weight_score, features[idx]), decisions[idx]) == False:
-                weight_score = add(weight_score, eta * features[idx] * decisions[idx])
+            if same_sign(dot(weight_score, features[idx]),
+                         decisions[idx]) == False:
+                weight_score = add(
+                    weight_score, eta * features[idx] * decisions[idx])
                 last_training_index = idx
                 if_find_fault = True
                 loop_cycling_thru += 1
@@ -48,15 +50,24 @@ def train (features, decisions, rand=False, eta=1):
 
     return loop_cycling_thru, last_training_index
 
-def run_pocket (train_path, verify_path, update_times, loop_times, use_w_last=False):
+def run_pocket (
+        train_path, verify_path, update_times,
+        loop_times, use_w_last=False):
     train_features, train_decisions = load_file(train_path)
     verify_features, verify_decisions = load_file(verify_path)
     error_rate_list = []
 
     for i in range(loop_times):
-        t_weight_score_head, t_weight_score_last = pocket_train(train_features, train_decisions, update_times)
-        trained_weight_score = t_weight_score_head if use_w_last == False else t_weight_score_last
-        error_rate = pocket_verfity (verify_features, verify_decisions, trained_weight_score)
+        t_weight_score_head, t_weight_score_last = pocket_train(
+            train_features, train_decisions, update_times)
+        if use_w_last == False:
+            trained_weight_score = t_weight_score_head
+        else:
+            trained_weight_score = t_weight_score_last
+        # trained_weight_score = t_weight_score_head if use_w_last == False else t_weight_score_last
+
+        error_rate = pocket_verfity(
+            verify_features, verify_decisions, trained_weight_score)
         error_rate_list.append(error_rate)
 
     return error_rate_list, average(error_rate_list)
@@ -70,7 +81,8 @@ def pocket_train (features, decisions, update_times, rand=True):
     for i in range(update_times):
         error_features_index_list = []
         for idx in index_map:
-            if same_sign(dot(weight_score, features[idx]), decisions[idx]) == False:
+            if same_sign(dot(weight_score, features[idx]),
+                         decisions[idx]) == False:
                 error_features_index_list.append(idx)
 
         if len(error_features_index_list) <= least_error_num:
@@ -78,14 +90,17 @@ def pocket_train (features, decisions, update_times, rand=True):
             least_error_num = len(error_features_index_list)
 
         target_index = error_features_index_list[0]
-        weight_score = add(weight_score, features[target_index] * decisions[target_index])
+        weight_score = add(
+            weight_score,
+            features[target_index] * decisions[target_index])
 
     return weight_score_head, weight_score
 
 def pocket_verfity (features, decisions, weight_score):
     error_count = 0
     for idx in range(len(features)):
-        if same_sign(dot(weight_score, features[idx]), decisions[idx]) == False:
+        if same_sign(dot(weight_score, features[idx]),
+                     decisions[idx]) == False:
             error_count += 1
 
     error_rate = error_count / float(len(features))
@@ -100,9 +115,12 @@ def random_train (features, decisions, times, eta=1):
 
     return cycles_list, average(cycles_list)
 
-def create_histogram (list_to_draw, x_label='X Axis', hist_title=r'$\mathrm{Histogram}$', hist_color='green'):
+def create_histogram (
+        list_to_draw, x_label='X Axis',
+        hist_title=r'$\mathrm{Histogram}$', hist_color='green'):
     hist_bins = len(list_to_draw)
-    plt.hist(list_to_draw, bins=hist_bins, normed=True, color=hist_color, histtype='step')
+    plt.hist(list_to_draw, bins=hist_bins, normed=True,
+             color=hist_color, histtype='step')
 
     plt.xlabel(x_label)
     plt.ylabel('Frequency')
