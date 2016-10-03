@@ -1,6 +1,7 @@
-import utilities as util
+# Q17_PLA_rand_with_eta
+from pkg import utilities as util
 
-DATA_PATH = 'hw1_15_train.dat'
+DATA_PATH = 'data/hw1_15_train.dat'
 TRAIN_TIMES = 2000
 ETA = 0.5
 

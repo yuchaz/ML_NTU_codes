@@ -1,6 +1,16 @@
 from numpy import array, dot, zeros, add, random, arange, average
 import matplotlib.pyplot as plt
+import sys, os, inspect
 import random
+
+def add_working_dir_to_path ():
+    currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+    parentdir = os.path.dirname(currentdir)
+    for x in sys.path:
+        x = os.path.abspath(x)
+        if parentdir in (x,x+os.sep):
+            return
+    sys.path.insert(1,parentdir)
 
 def load_file (infile):
     features_of_data = []
