@@ -1,5 +1,6 @@
-import utilities as util
-DATA_PATH = 'hw1_15_train.dat'
+# PLA with naive cycle.
+from pkg import utilities as util
+DATA_PATH = 'data/hw1_15_train.dat'
 
 def main():
     features, decisions = util.load_file(DATA_PATH)

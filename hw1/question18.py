@@ -1,6 +1,7 @@
-import utilities as util
-TRAIN_PATH = 'hw1_18_train.dat'
-VERIFY_PATH = 'hw1_18_test.dat'
+# Q18_pocket_w_head
+from pkg import utilities as util
+TRAIN_PATH = 'data/hw1_18_train.dat'
+VERIFY_PATH = 'data/hw1_18_test.dat'
 UPDATE_TIMES = 50
 LOOP_TIMES = 2000
 
