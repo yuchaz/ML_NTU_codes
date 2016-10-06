@@ -1,27 +1,12 @@
 import numpy as np
 from pkg import utilities as util
-
-LOOP_TIME = 5000
-LOWER_BOUND = -1
-UPPER_BOUND = 1
-SPLIT_POINT_PRECISION = 5
-FLIPPING_PROB = 0.2
-
-def generate_data(
-        data_size, lower_bound=LOWER_BOUND, upper_bound=UPPER_BOUND,
-        split_point_precision=SPLIT_POINT_PRECISION):
-    x = np.random.uniform(lower_bound,upper_bound,data_size)
-    y = [util.sign(i * util.flip_sign_with_probability(FLIPPING_PROB)) for i in x]
-    split_point = (upper_bound - lower_bound)/split_point_precision
-
-    return x, y, split_point
-
+from hw2.utilities import generate_data, get_config
 
 def main():
     Ein_list = []
-    for rgn in range(LOOP_TIME):
-        data_size = 20
-        x, y, split_point = generate_data(data_size)
+    loop_time, data_size, flipping_prob = get_config()
+    for rgn in range(loop_time):
+        x, y, split_point = generate_data(data_size, flipping_prob)
         theta_position_list = [i-split_point for i in x]
         Ein_min = 1.1
         min_theta = -1.1
