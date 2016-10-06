@@ -1,7 +1,6 @@
 from numpy import array, dot, zeros, add, random, arange, average
 import matplotlib.pyplot as plt
 import sys, os, inspect
-import random
 
 def add_working_dir_to_path ():
     currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -25,6 +24,19 @@ def load_file (infile):
             decisions_of_data.append(y)
 
     return features_of_data, decisions_of_data
+
+def sign(x):
+    if x >= 0:
+        return 1
+    else:
+        return -1
+
+def flip_sign_with_probability(p):
+    rand_seed = random.ranf()
+    if rand_seed >= p:
+        return 1
+    else:
+        return -1
 
 def same_sign (a, b):
     if a * b <= 0:
