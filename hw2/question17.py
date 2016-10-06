@@ -1,4 +1,5 @@
 import numpy as np
+from pkg import utilities as util
 
 LOOP_TIME = 5000
 LOWER_BOUND = -1
@@ -42,7 +43,6 @@ def main():
         for theta in theta_position_list:
             for s in range (-1,3,2):
                 for n in range(len(x)):
-
                     if s*sign(x[n]-theta) != y[n]:
                         err += 1
                 Ein = 1.0 * err / (data_size*2)
@@ -50,9 +50,9 @@ def main():
                     Ein_min = Ein
                     min_s = s
                     min_theta = theta
-
-    Ein_list.append(Ein_min)
+        Ein_list.append(Ein_min)
     print np.average(Ein_list)
+    util.create_histogram(Ein_list)
 
 if __name__ == '__main__':
     main()
