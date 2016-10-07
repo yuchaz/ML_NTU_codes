@@ -17,13 +17,11 @@ def generate_data(
 
     return x, y, split_point
 
-def get_config():
+def get_config(*arg):
     config = ConfigParser.RawConfigParser()
     config.read('hw2/config.ini')
-    loop_time = int(config.get('one_dimensional_perceptron', 'loop_time'))
-    data_size = int(config.get('one_dimensional_perceptron', 'data_size'))
-    flipping_prob = float(config.get('one_dimensional_perceptron', 'flipping_prob'))
-    return loop_time, data_size, flipping_prob
+
+    return [config.get('one_dimensional_perceptron', i) for i in arg]
 
 def find_min_Ein(x, y, split_point=SPLIT_POINT_DEFAULT):
     theta_position_list = [i-split_point for i in x]

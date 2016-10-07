@@ -4,10 +4,10 @@ from hw2.utilities import generate_data, get_config
 
 def main():
     Eout_list = []
-    loop_time, data_size, flipping_prob = get_config()
+    loop_time, data_size, flipping_prob = get_config('loop_time', 'data_size', 'flipping_prob')
 
-    for rgn in range(loop_time):
-        x, y, sp = generate_data(data_size, flipping_prob)
+    for rgn in range(int(loop_time)):
+        x, y, sp = generate_data(int(data_size), float(flipping_prob))
         ideal_y = [util.sign(i) for i in x]
         err = 0
         for n in range(len(y)):
