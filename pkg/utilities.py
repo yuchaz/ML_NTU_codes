@@ -11,14 +11,17 @@ def add_working_dir_to_path ():
             return
     sys.path.insert(1,parentdir)
 
-def load_file (infile):
+def load_file (infile, const_auto_add=True):
     features_of_data = []
     decisions_of_data = []
 
     with open(infile, 'r') as f:
         for line in f:
             line_list = map(float, line.split())
-            x = array([1]+line_list[:-1])
+            if const_auto_add:
+                x = array([1]+line_list[:-1])
+            else:
+                x = array(line_list[:-1])
             y = line_list[-1]
             features_of_data.append(x)
             decisions_of_data.append(y)
