@@ -43,3 +43,14 @@ def find_min_Ein(x, y, split_point=SPLIT_POINT_DEFAULT):
                 min_s = s
                 min_theta = theta
     return Ein_min, min_s, min_theta
+
+def train_decision_stump(path):
+    orig_x, y = util.load_file(path, False)
+    x = np.transpose(orig_x)
+    best_model_list = []
+    for i in range(len(x)):
+        best_model = find_min_Ein(x[i], y)+(i,)
+        best_model_list.append(best_model)
+
+    np.random.shuffle(best_model_list)
+    return min(best_model_list, key=lambda best:best[0])
