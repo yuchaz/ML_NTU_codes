@@ -17,7 +17,7 @@ def main():
                 for n in range(len(x)):
                     if s*util.sign(x[n]-theta) != y[n]:
                         err += 1
-                Ein = 1.0 * err / (data_size*2)
+                Ein = float(err) / (data_size*2)
                 if Ein <= Ein_min:
                     Ein_min = Ein
                     min_s = s
