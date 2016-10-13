@@ -24,3 +24,6 @@ def run_linear_regression(feature, label):
     pseudo_inverse_x = np.linalg.pinv(feature)
     w_lin = np.dot(pseudo_inverse_x, label)
     return w_lin
+
+def quadratic_transform_for_dim_2(feature):
+    return [ [1, f[0], f[1], f[0]*f[1], f[0]**2, f[1]**2 ] for f in feature ]
