@@ -2,6 +2,8 @@ from numpy import array, dot, zeros, add, random, arange, average
 import matplotlib.pyplot as plt
 import sys, os, inspect
 
+POCKET_UPDATE_TIME = 50
+
 def add_working_dir_to_path ():
     currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
     parentdir = os.path.dirname(currentdir)
@@ -97,7 +99,7 @@ def run_pocket (
 
     return error_rate_list, average(error_rate_list)
 
-def pocket_train (features, decisions, update_times, rand=True):
+def pocket_train (features, decisions, update_times=POCKET_UPDATE_TIME, rand=True):
     weight_score = zeros(len(features[0]))
     weight_score_head = zeros(len(features[0]))
     least_error_num = len(features)
