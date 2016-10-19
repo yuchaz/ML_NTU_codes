@@ -48,16 +48,29 @@ def train_by_gradient_descent(features, tags, gradient_func, eta=1, update_times
     weight_score = np.zeros(len(features[0]))
     for i in range(update_times):
         gradient = gradient_func(features, tags, weight_score)
-        if grad == 0:
+        if gradient.all() == 0:
             break
         weight_score = np.add(weight_score, -eta*gradient)
     return weight_score
 
 
+def test_data_from_hypothesis(features, tags, weight_score, error_measure_function):
+    err = 0
+    for n in range(len(tags)):
+        if error_measure_function(features[n], tags[n], weight_score) == True:
+            err += 1
+
+    Err = float(err) / len(features)
+    return Err
+
+def one_zero_error(feature, tag, weight_score):
+    return util.same_sign(np.dot(weight_score, feature), tag) == False
+
+
 def full_gradient_descent_theta(features, tags, weight_score):
     gradient_result = np.zeros(len(features[0]))
     for i in range(len(features)):
-        gradient_result = np.add(gradient_result, -tags[i]*features[i]*theta_function(-tags[i]*np.dot(features[i], weight_score[i])))
+        gradient_result = np.add(gradient_result, -tags[i]*features[i]*theta_function(-tags[i]*np.dot(features[i], weight_score)))
     return np.divide(gradient_result, len(features))
 
 
