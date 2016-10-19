@@ -75,4 +75,7 @@ def batch_gradient_descent_theta(features, tags, weight_score):
 
 
 def theta_function(s):
-    return 1.0/(1.0+np.exp(s))
+    if s>0:
+        return 1.0/(1.0+np.exp(-s))
+    else:
+        return np.exp(s)/(1.0+np.exp(s))
