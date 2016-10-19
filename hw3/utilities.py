@@ -27,3 +27,18 @@ def run_linear_regression(feature, label):
 
 def quadratic_transform_for_dim_2(feature):
     return [ [1, f[0], f[1], f[0]*f[1], f[0]**2, f[1]**2 ] for f in feature ]
+
+def run_quadratic_regression(features, tags):
+    transformed_features = quadratic_transform_for_dim_2(features)
+    w_qua = run_linear_regression(transformed_features, tags)
+    return w_qua, transformed_features
+
+def generate_data_and_run_regression(data_size, flipping_prob):
+    x, y = generate_data(data_size,flipping_prob)
+    w_qua, transformed_z = run_quadratic_regression(x,y)
+    err = 0
+    for n in range(len(y)):
+        if util.same_sign(np.dot(w_qua, transformed_z[n]), y[n]) == False:
+            err += 1
+    Ein = float(err) / len(y)
+    return w_qua, Ein
