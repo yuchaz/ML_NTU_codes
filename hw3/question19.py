@@ -5,7 +5,7 @@ from hw3.utilities import train_by_gradient_descent, batch_gradient_descent_thet
 TRAIN_PATH = 'data/hw3_train.dat'
 TEST_PATH = 'data/hw3_test.dat'
 UPDATE_TIMES = 2000
-eta = 0.001
+eta = 0.01
 
 def main():
     features, tags = util.load_file(TRAIN_PATH, False)

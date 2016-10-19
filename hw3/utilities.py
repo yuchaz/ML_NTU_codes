@@ -67,7 +67,7 @@ def one_zero_error(feature, tag, weight_score):
     return util.same_sign(np.dot(weight_score, feature), tag) == False
 
 
-def full_gradient_descent_theta(features, tags, weight_score):
+def batch_gradient_descent_theta(features, tags, weight_score):
     gradient_result = np.zeros(len(features[0]))
     for i in range(len(features)):
         gradient_result = np.add(gradient_result, -tags[i]*features[i]*theta_function(-tags[i]*np.dot(features[i], weight_score)))
