@@ -73,6 +73,18 @@ def batch_gradient_descent_theta(features, tags, weight_score):
         gradient_result = np.add(gradient_result, -tags[i]*features[i]*theta_function(-tags[i]*np.dot(features[i], weight_score)))
     return np.divide(gradient_result, len(features))
 
+def counted(fn):
+    def wrapper(*args, **kwargs):
+        wrapper.called+= 1
+        return fn(*args, **kwargs)
+    wrapper.called= 0
+    wrapper.__name__= fn.__name__
+    return wrapper
+
+@counted
+def stochastic_gradient_descent_theta(features, tags, weight_score):
+    n = stochastic_gradient_descent_theta.called % len(features)
+    return -tags[n]*features[n]*theta_function(-tags[n]*np.dot(features[n], weight_score))
 
 def theta_function(s):
     if s>0:
