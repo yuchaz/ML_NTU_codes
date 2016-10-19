@@ -4,6 +4,7 @@ from pkg import utilities as util
 LOWER_BOUND = -1
 HIGHER_BOUND = 1
 DIMENSION=2
+UPDATE_TIMES = 2000
 
 def generate_data(data_size, flipping_prob, dimension=DIMENSION,
         low=LOWER_BOUND, high=HIGHER_BOUND):
@@ -42,3 +43,23 @@ def generate_data_and_run_regression(data_size, flipping_prob):
             err += 1
     Ein = float(err) / len(y)
     return w_qua, Ein
+
+def train_by_gradient_descent(features, tags, gradient_func, eta=1, update_times=UPDATE_TIMES):
+    weight_score = np.zeros(len(features[0]))
+    for i in range(update_times):
+        gradient = gradient_func(features, tags, weight_score)
+        if grad == 0:
+            break
+        weight_score = np.add(weight_score, -eta*gradient)
+    return weight_score
+
+
+def full_gradient_descent_theta(features, tags, weight_score):
+    gradient_result = np.zeros(len(features[0]))
+    for i in range(len(features)):
+        gradient_result = np.add(gradient_result, -tags[i]*features[i]*theta_function(-tags[i]*np.dot(features[i], weight_score[i])))
+    return np.divide(gradient_result, len(features))
+
+
+def theta_function(s):
+    return 1.0/(1.0+np.exp(s))
