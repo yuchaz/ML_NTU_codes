@@ -24,7 +24,7 @@ def get_err_with_different_lambda(fea_to_train, tag_to_train, fea_to_test, tag_t
             lbda_min = lbda
 
     plot_x_y(lambda_range, Err_list)
-    return np.log10(lbda_min)
+    return np.log10(lbda_min), Err_min
 
 def plot_x_y(x_list,y_list):
     plt.plot(x_list, y_list)

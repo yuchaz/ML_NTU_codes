@@ -7,8 +7,9 @@ LAMBDA_RANGE = range(-10,3)
 
 def main():
     features, tags = load_file(TRAIN_PATH)
-    lbda_min, Ein_min = get_err_with_different_lambda(features, tags, features, tags, LAMBDA_RANGE)
-    print 'Ein min is {0}, occurred at log(lambda) = {1}'.format(Ein_min, lbda_min)
+    features_to_test, tags_to_test = load_file(TEST_PATH)
+    lbda_min, Eout_min = get_err_with_different_lambda(features, tags, features_to_test, tags_to_test, LAMBDA_RANGE)
+    print 'Eout min is {0}, occurred at log(lambda) = {1}'.format(Eout_min, lbda_min)
 
 if __name__ == '__main__':
     main()
