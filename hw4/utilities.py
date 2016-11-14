@@ -10,7 +10,7 @@ def run_ridge_regression(features, tags, lambda_v):
     w_reg = np.dot(pseudo_inverse_z,tags)
     return w_reg
 
-def get_err_with_different_lambda(fea_to_train, tag_to_train, fea_to_test, tag_to_test, lambda_range):
+def calculate_err_with_different_lambda(fea_to_train, tag_to_train, fea_to_test, tag_to_test, lambda_range):
     Err_list = []
     Err_min = 1
     lbda_min = 0
@@ -22,9 +22,13 @@ def get_err_with_different_lambda(fea_to_train, tag_to_train, fea_to_test, tag_t
         if Err < Err_min:
             Err_min = Err
             lbda_min = lbda
+    return Err_min, Err_list, lbda_min
 
+def get_err_with_different_lambda(fea_to_train, tag_to_train, fea_to_test, tag_to_test, lambda_range):
+    Err_min, Err_list, lbda_min = calculate_err_with_different_lambda(fea_to_train, tag_to_train, fea_to_test, tag_to_test, lambda_range)
     plot_x_y(lambda_range, Err_list)
     return np.log10(lbda_min), Err_min
+
 
 def plot_x_y(x_list,y_list):
     plt.plot(x_list, y_list)
