@@ -1,10 +1,9 @@
 import numpy as np
-from pkg import utilities as util
+from pkg import utilities as util, decorator as deco
 
 LOWER_BOUND = -1
 HIGHER_BOUND = 1
 DIMENSION=2
-UPDATE_TIMES = 2000
 
 def generate_data(data_size, flipping_prob, dimension=DIMENSION,
         low=LOWER_BOUND, high=HIGHER_BOUND):
@@ -44,28 +43,6 @@ def generate_data_and_run_regression(data_size, flipping_prob):
     Ein = float(err) / len(y)
     return w_qua, Ein
 
-def train_by_gradient_descent(features, tags, gradient_func, eta=1, update_times=UPDATE_TIMES):
-    weight_score = np.zeros(len(features[0]))
-    for i in range(update_times):
-        gradient = gradient_func(features, tags, weight_score)
-        if gradient.all() == 0:
-            break
-        weight_score = np.add(weight_score, -eta*gradient)
-    return weight_score
-
-
-def test_data_from_hypothesis(features, tags, weight_score, error_measure_function):
-    err = 0
-    for n in range(len(tags)):
-        if error_measure_function(features[n], tags[n], weight_score) == True:
-            err += 1
-
-    Err = float(err) / len(features)
-    return Err
-
-def one_zero_error(feature, tag, weight_score):
-    return util.same_sign(np.dot(weight_score, feature), tag) == False
-
 
 def batch_gradient_descent_theta(features, tags, weight_score):
     gradient_result = np.zeros(len(features[0]))
@@ -73,15 +50,7 @@ def batch_gradient_descent_theta(features, tags, weight_score):
         gradient_result = np.add(gradient_result, -tags[i]*features[i]*theta_function(-tags[i]*np.dot(features[i], weight_score)))
     return np.divide(gradient_result, len(features))
 
-def counted(fn):
-    def wrapper(*args, **kwargs):
-        wrapper.called+= 1
-        return fn(*args, **kwargs)
-    wrapper.called= 0
-    wrapper.__name__= fn.__name__
-    return wrapper
-
-@counted
+@deco.counted
 def stochastic_gradient_descent_theta(features, tags, weight_score):
     n = stochastic_gradient_descent_theta.called % len(features)
     return -tags[n]*features[n]*theta_function(-tags[n]*np.dot(features[n], weight_score))

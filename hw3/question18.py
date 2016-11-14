@@ -1,6 +1,9 @@
 import numpy as np
 import pkg.utilities as util
-from hw3.utilities import train_by_gradient_descent, batch_gradient_descent_theta, one_zero_error, test_data_from_hypothesis
+from pkg.training_helper import train_by_gradient_descent
+from pkg.testing_helper import test_data_from_hypothesis
+from pkg.error_estimation import one_zero_error
+from hw3.utilities import batch_gradient_descent_theta
 
 TRAIN_PATH = 'data/hw3_train.dat'
 TEST_PATH = 'data/hw3_test.dat'
