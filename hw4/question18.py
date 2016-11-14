@@ -5,12 +5,12 @@ from pkg.error_estimation import one_zero_error
 
 TRAIN_PATH = 'data/hw4_train.dat'
 TEST_PATH = 'data/hw4_test.dat'
-LAMBDA = 10**0.7
+LAMBDA = 10**-7
 
 def main():
     features, tags = load_file(TRAIN_PATH)
     test_features, test_tags = load_file(TEST_PATH)
-    weight_regression = run_ridge_regression(features[0:120], tags[0:120], LAMBDA)
+    weight_regression = run_ridge_regression(features, tags, LAMBDA)
     Ein = test_data_from_hypothesis(features, tags, weight_regression, one_zero_error)
     Eout = test_data_from_hypothesis(test_features, test_tags, weight_regression, one_zero_error)
     print 'Ein is {0}, and Eout is {1}'.format(Ein, Eout)
